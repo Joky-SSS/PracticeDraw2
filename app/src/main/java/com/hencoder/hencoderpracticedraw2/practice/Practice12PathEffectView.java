@@ -2,8 +2,15 @@ package com.hencoder.hencoderpracticedraw2.practice;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.ComposePathEffect;
+import android.graphics.CornerPathEffect;
+import android.graphics.DashPathEffect;
+import android.graphics.DiscretePathEffect;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.PathDashPathEffect;
+import android.graphics.PathEffect;
+import android.graphics.SumPathEffect;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
@@ -42,35 +49,48 @@ public class Practice12PathEffectView extends View {
         // 使用 Paint.setPathEffect() 来设置不同的 PathEffect
 
         // 第一处：CornerPathEffect
+        paint.setPathEffect(new CornerPathEffect(20));
         canvas.drawPath(path, paint);
 
         canvas.save();
         canvas.translate(500, 0);
         // 第二处：DiscretePathEffect
+        paint.setPathEffect(new DiscretePathEffect(20,5));
         canvas.drawPath(path, paint);
         canvas.restore();
 
         canvas.save();
         canvas.translate(0, 200);
         // 第三处：DashPathEffect
+        paint.setPathEffect(new DashPathEffect(new float[]{20,10},0));
         canvas.drawPath(path, paint);
         canvas.restore();
 
         canvas.save();
         canvas.translate(500, 200);
         // 第四处：PathDashPathEffect
+        Path dashPath = new Path();
+        dashPath.addCircle(10,10,20, Path.Direction.CW);
+        PathDashPathEffect pathDashPathEffect = new PathDashPathEffect(dashPath,40,10, PathDashPathEffect.Style.TRANSLATE);
+        paint.setPathEffect(pathDashPathEffect);
         canvas.drawPath(path, paint);
         canvas.restore();
 
         canvas.save();
         canvas.translate(0, 400);
         // 第五处：SumPathEffect
+        PathEffect dashEffect = new DashPathEffect(new float[]{20, 10}, 0);
+        PathEffect discreteEffect = new DiscretePathEffect(20, 5);
+        SumPathEffect sumPathEffect = new SumPathEffect(dashEffect,discreteEffect);
+        paint.setPathEffect(sumPathEffect);
         canvas.drawPath(path, paint);
         canvas.restore();
 
         canvas.save();
         canvas.translate(500, 400);
         // 第六处：ComposePathEffect
+        ComposePathEffect composePathEffect = new ComposePathEffect(dashEffect,discreteEffect);
+        paint.setPathEffect(composePathEffect);
         canvas.drawPath(path, paint);
         canvas.restore();
     }
